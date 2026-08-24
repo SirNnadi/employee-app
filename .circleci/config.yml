@@ -1,7 +1,6 @@
 version: 2.1
 
 orbs:
-  aws-cli: circleci/aws-cli@4.1
   python: circleci/python@2.1
 
 # ── Reusable commands ──────────────────────────────────────────────────────────
@@ -42,18 +41,18 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-          region: AWS_REGION
-          profile_name: default
+      - run:
+          name: Install AWS CLI
+          command: |
+            curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip
+            unzip -q awscliv2.zip
+            sudo ./aws/install
       - run:
           name: Debug env vars
           command: |
             echo "AWS_REGION=${AWS_REGION}"
             echo "ECR_REGISTRY=${ECR_REGISTRY}"
             aws sts get-caller-identity
-            aws ecr get-login-password --region ${AWS_REGION}
       - ecr-login
       - run:
           name: Set image tags
