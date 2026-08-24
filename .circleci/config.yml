@@ -47,6 +47,12 @@ jobs:
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
           profile_name: default
+      - run:
+          name: Debug env vars
+          command: |
+            echo "AWS_REGION=${AWS_REGION}"
+            echo "ECR_REGISTRY=${ECR_REGISTRY}"
+            aws sts get-caller-identity
       - ecr-login
       - run:
           name: Set image tags
