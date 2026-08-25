@@ -21,7 +21,7 @@ pipeline {
                     cd backend
                     DATABASE_URL=sqlite:///test.db \
                     AWS_REGION=us-east-1 \
-                    pytest -v
+                    python3 -m pytest -v
                 '''
             }
         }
