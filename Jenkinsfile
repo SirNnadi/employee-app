@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION      = 'us-east-1'
-        ECR_REGISTRY    = '075120018043.dkr.ecr.us-east-1.amazonaws.com'
+        ECR_REGISTRY    = '068704208379.dkr.ecr.us-east-1.amazonaws.com'
         BACKEND_REPO    = "${ECR_REGISTRY}/employee-backend"
         FRONTEND_REPO   = "${ECR_REGISTRY}/employee-frontend"
         TIMESTAMP       = sh(script: "date +'%Y%m%d-%H%M%S'", returnStdout: true).trim()
