@@ -50,10 +50,19 @@ pipeline {
         // ── Stage 3: Deploy containers ────────────────────────────────────
         stage('Deploy') {
             steps {
-                sh '''
-                    docker-compose down --remove-orphans || true
-                    docker-compose up -d --build
-                '''
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials'
+                ]]) {
+                    sh '''
+                        aws ecr get-login-password --region $AWS_REGION | \
+                            docker login --username AWS --password-stdin $ECR_REGISTRY
+                        docker-compose down --remove-orphans || true
+                        BACKEND_REPO=$BACKEND_REPO BACKEND_TAG=$BACKEND_TAG \
+                        FRONTEND_REPO=$FRONTEND_REPO FRONTEND_TAG=$FRONTEND_TAG \
+                        docker-compose up -d
+                    '''
+                }
             }
         }
 
