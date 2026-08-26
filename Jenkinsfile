@@ -47,7 +47,17 @@ pipeline {
             }
         }
 
-        // ── Stage 3: Update Helm values ───────────────────────────────────
+        // ── Stage 3: Deploy containers ────────────────────────────────────
+        stage('Deploy') {
+            steps {
+                sh '''
+                    docker-compose down --remove-orphans || true
+                    docker-compose up -d --build
+                '''
+            }
+        }
+
+        // ── Stage 4: Update Helm values ───────────────────────────────────
         stage('Update Image Tags') {
             steps {
                 sh '''
